@@ -142,7 +142,7 @@ public class Class_1_GET {
 	public Response AllPlayersInfo()
 			throws Exception {
 		try {
-			jsonArray = queriesObject.returnAllPlayersInfo(playerName);
+			jsonArray = queriesObject.returnAllPlayersInfo();
 			getData = jsonArray.toString();
 
 		} catch (JSONException e) {
