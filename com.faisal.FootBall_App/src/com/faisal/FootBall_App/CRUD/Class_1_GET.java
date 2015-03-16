@@ -26,7 +26,7 @@ public class Class_1_GET {
 	static String Message = "UNMATCHED.... Enter correct field or Server was Unreachable....";
 	String getData,returnString = null;
 
-	// /////////////////////////////////PLAYERS///////////////////////////////
+	// /////////////////////////////////PLAYER///////////////////////////////
 	@Path("/Players/{playerName}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -44,7 +44,7 @@ public class Class_1_GET {
 		return Response.ok(getData).build();
 	}
 
-	// /////////////////////////////////PLAYERS///////////////////////////////
+	// /////////////////////////////////PLAYER///////////////////////////////
 
 	// ///////////////////////////////////TEAMS///////////////////////////////
 	@Path("/Teams/{teamName}")
@@ -117,4 +117,41 @@ public class Class_1_GET {
 
 		return Response.ok(returnString).build();
 	}
+	
+	
+	@Path("/Manager/{managerName}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response ManagerInfo(@PathParam("managerName") String managerName)
+			throws Exception {
+		try {
+			jsonArray = queriesObject.returnManagerInfo(managerName);
+			getData = jsonArray.toString();
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(Message).build();
+		}
+		return Response.ok(getData).build();
+	}
+	
+	/////////////////////////////AllPlayers////////////////////////////////
+	@Path("/Players/")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response AllPlayersInfo()
+			throws Exception {
+		try {
+			jsonArray = queriesObject.returnAllPlayersInfo(playerName);
+			getData = jsonArray.toString();
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(Message).build();
+		}
+
+		return Response.ok(getData).build();
+	}
+
+	// /////////////////////////////////PLAYER///////////////////////////////
 }
