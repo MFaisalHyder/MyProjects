@@ -43,6 +43,30 @@ public class Queries extends DataBase {
 		}
 		return GetjsonArray;
 	}
+	
+	
+		public JSONArray returnAllPlayersInfo() throws Exception {
+
+		try {
+			conn = DBConnect();
+			query = conn.prepareStatement("Select * from Players");
+			rs = query.executeQuery();
+
+			GetjsonArray = JSONSerializerObject.JsonArray(rs);
+			query.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return GetjsonArray;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return GetjsonArray;
+		} finally {
+			if (conn != null)
+				conn.close();
+		}
+		return GetjsonArray;
+	}
 
 	public JSONArray returnTeamInfo(String teamName) throws Exception {
 
