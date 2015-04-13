@@ -22,11 +22,11 @@ public class Class_1_GET {
 
 	Queries queriesObject = new Queries();
 	JSONArray jsonArray = new JSONArray();
-	JSONObject jsonObject,data = new JSONObject();
+	JSONObject jsonObject, data = new JSONObject();
 	static String Message = "UNMATCHED.... Enter correct field or Server was Unreachable....";
-	String getData,returnString = null;
+	String getData, returnString = null;
 
-	// /////////////////////////////////PLAYER///////////////////////////////
+	////////////////////////////////////PLAYER///////////////////////////////
 	@Path("/Players/{playerName}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -46,7 +46,26 @@ public class Class_1_GET {
 
 	// /////////////////////////////////PLAYER///////////////////////////////
 
-	// ///////////////////////////////////TEAMS///////////////////////////////
+	// ///////////////////////////AllPlayers////////////////////////////////
+	@Path("/Players/")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response AllPlayersInfo() throws Exception {
+		try {
+			jsonArray = queriesObject.returnAllPlayersInfo();
+			getData = jsonArray.toString();
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(Message).build();
+		}
+
+		return Response.ok(getData).build();
+	}
+
+	// /////////////////////////////////PLAYER///////////////////////////////
+
+	// ///////////////////////////////////TEAM///////////////////////////////
 	@Path("/Teams/{teamName}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -65,7 +84,25 @@ public class Class_1_GET {
 		return Response.ok(getData).build();
 	}
 
-	// ///////////////////////////////////TEAMS///////////////////////////////
+	// ///////////////////////////////////TEAM///////////////////////////////
+
+	// ///////////////////////////////////AllTEAMS///////////////////////////////
+
+	@Path("/Teams/")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response TeamsInfo() throws Exception {
+		try {
+			jsonArray = queriesObject.returnAllTeamsInfo();
+			getData = jsonArray.toString();
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return Response.status(500).entity(Message).build();
+		}
+
+		return Response.ok(getData).build();
+	}
 
 	// //////////////////////////////Manager//////////////////////////////////
 
@@ -84,8 +121,8 @@ public class Class_1_GET {
 		}
 		return Response.ok(getData).build();
 	}
-	
-	/////////////////////////////Manager////////////////////////////////
+
+	// ///////////////////////////Manager////////////////////////////////
 	@Path("/Insert/{record}")
 	@POST
 	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED,
@@ -117,41 +154,4 @@ public class Class_1_GET {
 
 		return Response.ok(returnString).build();
 	}
-	
-	
-	@Path("/Manager/{managerName}")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response ManagerInfo(@PathParam("managerName") String managerName)
-			throws Exception {
-		try {
-			jsonArray = queriesObject.returnManagerInfo(managerName);
-			getData = jsonArray.toString();
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return Response.status(500).entity(Message).build();
-		}
-		return Response.ok(getData).build();
-	}
-	
-	/////////////////////////////AllPlayers////////////////////////////////
-	@Path("/Players/")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response AllPlayersInfo()
-			throws Exception {
-		try {
-			jsonArray = queriesObject.returnAllPlayersInfo();
-			getData = jsonArray.toString();
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return Response.status(500).entity(Message).build();
-		}
-
-		return Response.ok(getData).build();
-	}
-
-	// /////////////////////////////////PLAYER///////////////////////////////
 }
