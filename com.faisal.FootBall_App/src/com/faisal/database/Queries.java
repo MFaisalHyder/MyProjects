@@ -19,12 +19,15 @@ public class Queries extends DataBase {
 	JSONSerializer JSONSerializerObject = new JSONSerializer();
 	JSONArray GetjsonArray = new JSONArray();
 
+	// ==============================================================================//
 	public JSONArray returnPlayerInfo(String playerName) throws Exception {
 
 		try {
 			conn = DBConnect();
 			query = conn
-					.prepareStatement("Select PlayerName , TeamName , CountryName from Players where PlayerName = ?");
+					.prepareStatement("select Players.PlayerName,Players.TeamName , PlayersInfo.MatchesPlayed,PlayersInfo.Goals,PlayersInfo.Assists,"
+							+ " PlayersInfo.Position,PlayersInfo.Age,PlayersInfo.Nationality,Players.PictureFS from Players,PlayersInfo where "
+							+ " Players.PlayerID = PlayersInfo.PlayerID and Players.PlayerName = " + " ?");
 			query.setString(1, playerName);
 			rs = query.executeQuery();
 
@@ -43,13 +46,14 @@ public class Queries extends DataBase {
 		}
 		return GetjsonArray;
 	}
-	
-	
-		public JSONArray returnAllPlayersInfo() throws Exception {
+
+	// ==============================================================================//
+	public JSONArray returnAllPlayersInfo() throws Exception {
 
 		try {
 			conn = DBConnect();
-			query = conn.prepareStatement("Select * from Players");
+			query = conn.prepareStatement(" select Players.PlayerID, Players.PlayerName, Players.TeamName, PlayersInfo.Nationality,Players.Picture,Players.PictureFS"
+					+ " from Players ,PlayersInfo where Players.PlayerID = PlayersInfo.PlayerID");
 			rs = query.executeQuery();
 
 			GetjsonArray = JSONSerializerObject.JsonArray(rs);
@@ -68,12 +72,42 @@ public class Queries extends DataBase {
 		return GetjsonArray;
 	}
 
+	// ==============================================================================//
+	public JSONArray returnAllTeamsInfo() throws Exception {
+		try {
+
+			conn = DBConnect();
+			query = conn.prepareStatement("select Teams.TeamName,Teams.TeamCode,Leagues.LeagueName,Teams.TeamFlag,Teams.TeamFlagFS,"
+					+ "Teams.TeamFlagIC,Teams.TeamsDescription from Teams,Leagues "
+					+ "where Teams.TeamName=Leagues.TeamName order by TeamName");
+			rs = query.executeQuery();
+
+			GetjsonArray = JSONSerializerObject.JsonArray(rs);
+			query.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return GetjsonArray;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return GetjsonArray;
+		} finally {
+			if (!(conn.equals(null)))
+				conn.close();
+		}
+
+		return GetjsonArray;
+	}
+
+	// ==============================================================================//
 	public JSONArray returnTeamInfo(String teamName) throws Exception {
 
 		try {
 			conn = DBConnect();
 			query = conn
-					.prepareStatement("select ManagerName,TeamName,LeagueName from TeamManager where TeamName = ?");
+					.prepareStatement("select Teams.TeamFlagFS,Teams.TeamName,Leagues.LeagueName,"
+							+ "Teams.Points,Teams.TeamsDescription from Teams,Leagues where "
+							+ "Teams.TeamName = Leagues.TeamName and Teams.TeamName = "+ "?");
 
 			query.setString(1, teamName);
 			rs = query.executeQuery();
@@ -98,6 +132,7 @@ public class Queries extends DataBase {
 
 	}
 
+	// ==============================================================================//
 	public JSONArray returnManagerInfo(String managerName) throws Exception {
 		try {
 			conn = DBConnect();
@@ -124,6 +159,7 @@ public class Queries extends DataBase {
 		return GetjsonArray;
 	}
 
+	// ==============================================================================//
 	public int InsertPlayerRecord(int playerID, String playerName,
 			String teamName, String countryName) throws Exception {
 		try {
@@ -152,6 +188,7 @@ public class Queries extends DataBase {
 		return 200;
 	}
 
+	// ==============================================================================//
 	public int InsertTeamRecord(String teamName, String teamCode)
 			throws Exception {
 		try {
