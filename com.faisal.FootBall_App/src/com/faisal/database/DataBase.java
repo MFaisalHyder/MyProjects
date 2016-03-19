@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 public class DataBase {
 
+	//class for DataBase connection
 	private static DataSource database = null;
 	private static Context context = null;
 
